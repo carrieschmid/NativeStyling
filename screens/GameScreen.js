@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
-import { View, Text, Stylesheet, Button } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+//these are hooks
+//useRefs allows you to create a value that survives component re-render
+//useEffect allows you to run logic after every render cycle
+import { View, Text, StyleSheet, Button, Alert } from 'react-native';
 import NumberContainer from '../components/NumberContainer'
 import Card from '../components/Card'
 
@@ -22,6 +25,47 @@ const GameScreen = props => {
     const [currentGuess, setCurrentGuess] = useState(generateRandomBetween(1 , 100, props.userChoice)
     );
     //this will only be initiated when state is empty, after guess is made it will be managed outside of the component
+    const [rounds, setRounds] = useState(0);
+    //this will increment on each guess
+    const currentLow = useRef(1);
+    const currentHigh = useRef(100);
+    //initialized once, stored detached from the component like state
+    
+    const { userChoice, onGameOver } = props;
+
+    //this is run after each render cycle
+    useEffect(() => {
+        if (currentGuess === userChoice) {
+          onGameOver(rounds);
+        }
+      }, [currentGuess, userChoice, onGameOver]);
+      //this is a second condition passed to useEffect. You have to specify any value that's coming from outside this useEffect function. Whenever a task changes after render cycle the effct will re-run, but only if they change, the props part of it is store above, this eliminate the re-running of the effect if any other prop changes.
+
+    const nextGuessHandler = direction => { 
+        if ((direction === 'lower' && currentGuess < props.userChoice) || (direction === 'greater' && currentGuess > props.userChoice)) {
+        //in both case we are giving an incorrect hint, this is to prevent the user from giving them
+            Alert.alert('Don\'t lie!', 'You know that this is wrong.', [{text: 'Sorry!', style: 'cancel'}])
+        return;
+
+    }
+    if (direction === 'lower') {
+        //current max and min should adjust over time, if I'm telling the computer your current guess can't be higher than this one
+        currentHigh.current = currentGuess;
+    
+    } else {
+       currentLow.current = currentGuess;
+       //else in the case is the greater buttin getting tapped
+
+    }
+    const nextNumber = generateRandomBetween ( currentLow.current, currentHigh.current, currentGuess);
+    setCurrentGuess(nextNumber);
+    //now component will be re-rendered and it will output the next guess
+
+    setCurrentGuess(nextNumber);
+    setRounds(curRounds => curRounds + 1);
+    //this increments the rounds with each guess
+
+};
 
 
 
@@ -29,14 +73,29 @@ return (
     <View>
         <Text>Opponent's Guess</Text>
         <NumberContainer>{currentGuess}</NumberContainer>
-            <Card>
-                <Button title = "LOWER" onPress={() => {}}/>
-                <Button title = "GREATER" onPress={() => {}}/>
+            <Card style = {styles.buttonContainer} >
+                <Button title = "LOWER" onPress={nextGuessHandler.bind(this, 'lower')}/>
+                <Button title = "GREATER" onPress={nextGuessHandler.bind(this, 'greater')}/>
+                
             </Card>
     </View>
 );
 
 };
-const styles =StyleSheet.create({});
+const styles =StyleSheet.create({
+    screen:{
+        flex: 1,
+        padding: 10,
+        alignItems: 'center'
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        // we can set a flex direction here because we use a View in the card component 
+        justifyContent: 'space-around',
+        marginTop: 20,
+        width: 300,
+        maxWidth: '80%'
+    }
+});
 
 export default GameScreen;
