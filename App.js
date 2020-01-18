@@ -6,6 +6,7 @@ import GameScreen from './screens/GameScreen';
 import GameOverScreen from './screens/GameOverScreen';
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
+import MainButton from './components/MainButton';
 
 
 const fetchFonts = () => {
@@ -45,9 +46,7 @@ export default function App() {
   };
 
   let content = <StartGameScreen onStartGame={startGameHandler} />;
-  content = (
-    <GameOverScreen roundsNumber = {1} userNumber={1} onRestart={configureNewGameHandler}/>
-  );
+ 
 
   if (userNumber && guessRounds <= 0) {
     content = (
@@ -73,5 +72,5 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1
   }
-  
+
 });

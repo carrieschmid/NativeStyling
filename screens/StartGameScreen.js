@@ -14,6 +14,7 @@ import Input from '../components/Input';
 import NumberContainer from '../components/NumberContainer';
 import Colors from '../constants/colors';
 import BodyText from '../components/BodyText';
+import MainButton from '../components/MainButton';
 
 const StartGameScreen = props => {
   const [enteredValue, setEnteredValue] = useState('');
@@ -52,7 +53,8 @@ const StartGameScreen = props => {
       <Card style={styles.summaryContainer}>
         <BodyText>You selected</BodyText>
         <NumberContainer>{selectedNumber}</NumberContainer>
-        <Button title="START GAME" onPress = {() => props.onStartGame(selectedNumber)}/>
+        <MainButton onPress = {() => props.onStartGame(selectedNumber)}>START GAME</MainButton>
+        {/* keep in mind that on this button I configured the text to be shown such that it's actually the content that is passed between the opening and closing tags of our button, therefore the title is no longer passed on the title prop, we leave the onPress because it's been forwarded to MainButtin with the onClick prop */}
       </Card>
     );
   }
