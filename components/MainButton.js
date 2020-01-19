@@ -1,11 +1,11 @@
 import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import Colors from '../constants/colors'
+import Colors from '../constants/colors';
 
 const MainButton = props => {
-    return <TouchableOpacity onPress={props.onClick}>   
+    return <TouchableOpacity onPress={props.onPress}>   
     <View style = {styles.button}>
-        <Text style = {StyleSheet.buttonText}>
+        <Text style = {styles.buttonText}>
             {props.children}
             {/* our button should useable be such that we pass the text between the opening and losing tags of the component, props.children */}
         </Text>
@@ -15,10 +15,11 @@ const MainButton = props => {
 };
 
 const styles = StyleSheet.create({
-    buttons: {
+    button: {
         backgroundColor: Colors.primary,
         paddingVertical: 12,
-        paddingHorizontal: 30 
+        paddingHorizontal: 30,
+        borderRadius: 30 
 
     },
 

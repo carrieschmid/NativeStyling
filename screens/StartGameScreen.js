@@ -51,10 +51,12 @@ const StartGameScreen = props => {
   if (confirmed) {
     confirmedOutput = (
       <Card style={styles.summaryContainer}>
-        <BodyText>You selected</BodyText>
-        <NumberContainer>{selectedNumber}</NumberContainer>
-        <MainButton onPress = {() => props.onStartGame(selectedNumber)}>START GAME</MainButton>
-        {/* keep in mind that on this button I configured the text to be shown such that it's actually the content that is passed between the opening and closing tags of our button, therefore the title is no longer passed on the title prop, we leave the onPress because it's been forwarded to MainButtin with the onClick prop */}
+      <BodyText>You selected</BodyText>
+      <NumberContainer>{selectedNumber}</NumberContainer>
+      <MainButton onPress={() => props.onStartGame(selectedNumber)}>
+        START GAME
+      </MainButton>
+        {/* keep in mind that on this button I configured the text to be shown such that it's actually the content that is passed between the opening and closing tags of our button, therefore the title is no longer passed on the title prop, we leave the onPress because it's been forwarded to MainButtin with the onClick prop. you can also output an ionicon */}
       </Card>
     );
   }

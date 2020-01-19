@@ -6,7 +6,6 @@ import GameScreen from './screens/GameScreen';
 import GameOverScreen from './screens/GameOverScreen';
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
-import MainButton from './components/MainButton';
 
 
 const fetchFonts = () => {
