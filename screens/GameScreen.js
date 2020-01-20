@@ -7,6 +7,7 @@ import NumberContainer from '../components/NumberContainer'
 import Card from '../components/Card';
 import MainButton from '../components/MainButton';
 import { Ionicons } from '@expo/vector-icons';
+import BodyText from '../components/BodyText';
 
 //this does not rely on props or state, it generates number between a min and max
 const generateRandomBetween = (min, max, exclude) => {
@@ -23,6 +24,11 @@ const generateRandomBetween = (min, max, exclude) => {
     }
 };
 
+const renderListItem = (value, numOfRound) => (<View key = {value} style ={styles.listItem}>
+    <Text>#{numOfRound}</Text>
+    <BodyText>{value}</BodyText>
+    </View>);
+
 const GameScreen = props => {
     const initialGuess = generateRandomBetween(1 , 100, props.userChoice);
     const [currentGuess, setCurrentGuess] = useState(initialGuess);
@@ -30,7 +36,7 @@ const GameScreen = props => {
     const [pastGuesses, setPastGuesses] = useState([initialGuess]);
     //add new guess to array whenever we generate a new random number in the nextGuessHandler
     //will not use intialGuess for subsequest renders, because react senses it, detached state handling, initalGuess will not be used
-    const [rounds, setRounds] = useState(0);
+    // const [rounds, setRounds] = useState(0);
     //this will increment on each guess
     const currentLow = useRef(1);
     const currentHigh = useRef(100);
@@ -77,7 +83,7 @@ const GameScreen = props => {
 
 
 return (
-    <View>
+    <View style={styles.screen}>
         <Text>Opponent's Guess</Text>
         <NumberContainer>{currentGuess}</NumberContainer>
             <Card style = {styles.buttonContainer} >
@@ -90,10 +96,12 @@ return (
                 </MainButton>
                 
             </Card>
-            <ScrollView>
-                {pastGuesses.map(guess => (<View key= {guess}><Text>{guess}</Text></View>
-                ))}
+            <View style={styles.listContainer}>
+            <ScrollView contentContainerStyle={styles.list}>
+                {pastGuesses.map((guess, index) => renderListItem(guess, pastGuesses.length - index))}
             </ScrollView>
+            </View>
+            
     </View>
 );
 
@@ -111,6 +119,18 @@ const styles =StyleSheet.create({
         marginTop: 20,
         width: 300,
         maxWidth: '100%'
+    },
+    listContainer:{
+        flex: 1,
+        width: '80%'
+    },
+    listItem:{
+        borderColor: '#ccc',
+        padding: 15,
+        marginVertical: 10,
+        backgroundColor: 'white',
+        flexDirection: 'row',
+        justifyContent: 'space-between'
     }
 });
 
