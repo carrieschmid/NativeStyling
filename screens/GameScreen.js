@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 //these are hooks
 //useRefs allows you to create a value that survives component re-render
 //useEffect allows you to run logic after every render cycle
-import { View, Text, StyleSheet, Button, Alert } from 'react-native';
+import { View, Text, StyleSheet, Button, Alert, ScrollView } from 'react-native';
 import NumberContainer from '../components/NumberContainer'
 import Card from '../components/Card';
 import MainButton from '../components/MainButton';
@@ -24,9 +24,12 @@ const generateRandomBetween = (min, max, exclude) => {
 };
 
 const GameScreen = props => {
-    const [currentGuess, setCurrentGuess] = useState(generateRandomBetween(1 , 100, props.userChoice)
-    );
+    const initialGuess = generateRandomBetween(1 , 100, props.userChoice);
+    const [currentGuess, setCurrentGuess] = useState(initialGuess);
     //this will only be initiated when state is empty, after guess is made it will be managed outside of the component
+    const [pastGuesses, setPastGuesses] = useState([initialGuess]);
+    //add new guess to array whenever we generate a new random number in the nextGuessHandler
+    //will not use intialGuess for subsequest renders, because react senses it, detached state handling, initalGuess will not be used
     const [rounds, setRounds] = useState(0);
     //this will increment on each guess
     const currentLow = useRef(1);
@@ -38,7 +41,7 @@ const GameScreen = props => {
     //this is run after each render cycle
     useEffect(() => {
         if (currentGuess === userChoice) {
-          onGameOver(rounds);
+          onGameOver(pastGuesses.length);
         }
       }, [currentGuess, userChoice, onGameOver]);
       //this is a second condition passed to useEffect. You have to specify any value that's coming from outside this useEffect function. Whenever a task changes after render cycle the effct will re-run, but only if they change, the props part of it is store above, this eliminate the re-running of the effect if any other prop changes.
@@ -55,8 +58,9 @@ const GameScreen = props => {
         currentHigh.current = currentGuess;
     
     } else {
-       currentLow.current = currentGuess;
+       currentLow.current = currentGuess + 1;
        //else in the case is the greater buttin getting tapped
+       //we add one bcause we need the number to be guarenteed to be unique since we're using it as our key, a new lower bourndary which can be generated in the future but we didn't generate before
 
     }
     const nextNumber = generateRandomBetween ( currentLow.current, currentHigh.current, currentGuess);
@@ -64,9 +68,10 @@ const GameScreen = props => {
     //now component will be re-rendered and it will output the next guess
 
     setCurrentGuess(nextNumber);
-    setRounds(curRounds => curRounds + 1);
+    // setRounds(curRounds => curRounds + 1);
     //this increments the rounds with each guess
-
+    setPastGuesses(curPastGuesses => [nextNumber,...curPastGuesses])
+    //we have to set our pervious guesses
 };
 
 
@@ -85,6 +90,10 @@ return (
                 </MainButton>
                 
             </Card>
+            <ScrollView>
+                {pastGuesses.map(guess => (<View key= {guess}><Text>{guess}</Text></View>
+                ))}
+            </ScrollView>
     </View>
 );
 

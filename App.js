@@ -6,6 +6,7 @@ import GameScreen from './screens/GameScreen';
 import GameOverScreen from './screens/GameOverScreen';
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
+//libraries give pre-build components, buttons, etc., install and import the components you need into your project
 
 
 const fetchFonts = () => {
