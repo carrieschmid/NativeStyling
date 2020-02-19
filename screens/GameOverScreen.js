@@ -6,7 +6,8 @@ import {
   Button,
   Image,
   Dimensions,
-  ScrollView
+  ScrollView,
+  SafeAreaView
 } from "react-native";
 // import { Colors } from 'react-native/Libraries/NewAppScreen';
 import colors from "../constants/colors";
@@ -14,35 +15,38 @@ import BodyText from "../components/BodyText";
 
 const GameOverScreen = (props) => {
   return (
-    <ScrollView>
-      <View style={styles.screen}>
-        <Text>The Game is Over! </Text>
-        <View style={styles.imageContainer}>
-          <Image
-            // fadeDuration option here
-            // source = {require('../assets/success.png')}
-            //size of this iamge is known
-            source={{
-              uri:
-                "https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=1&amp;w=500"
-            }}
-            //always have to st width and height on network images
-            style={styles.image}
-            resizeMode="cover"
-            // maintains aspect ratio but doesnt shrink image to fit it
-          />
+    <SafeAreaView>
+      {/* Avoids things that would hide it like the notch */}
+      <ScrollView>
+        <View style={styles.screen}>
+          <Text>The Game is Over! </Text>
+          <View style={styles.imageContainer}>
+            <Image
+              // fadeDuration option here
+              // source = {require('../assets/success.png')}
+              //size of this iamge is known
+              source={{
+                uri:
+                  "https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=1&amp;w=500"
+              }}
+              //always have to st width and height on network images
+              style={styles.image}
+              resizeMode="cover"
+              // maintains aspect ratio but doesnt shrink image to fit it
+            />
+          </View>
+          <BodyText style={styles.resultText}>
+            Your phone needed{" "}
+            <Text style={styles.highlight}>{props.roundsNumber}</Text> rounds to
+            guess the number{" "}
+            <Text style={styles.highlight}>{props.userNumber}</Text>
+          </BodyText>
+          {/* you can nest text within text, and the children receive the style set up on the outter text, text does not use flexBox */}
+          <Text>Number was: {props.userNumber}</Text>
+          <Button title="NEW GAME" onPress={props.onRestart} />
         </View>
-        <BodyText style={styles.resultText}>
-          Your phone needed{" "}
-          <Text style={styles.highlight}>{props.roundsNumber}</Text> rounds to
-          guess the number{" "}
-          <Text style={styles.highlight}>{props.userNumber}</Text>
-        </BodyText>
-        {/* you can nest text within text, and the children receive the style set up on the outter text, text does not use flexBox */}
-        <Text>Number was: {props.userNumber}</Text>
-        <Button title="NEW GAME" onPress={props.onRestart} />
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
